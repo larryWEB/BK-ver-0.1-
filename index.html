@@ -1,0 +1,350 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Quiz Platform</title>
+    <style>
+        * {
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        
+        body {
+            margin: 0;
+            padding: 0;
+            background-color: #f0f2f5;
+            color: #333;
+        }
+        
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        
+        .modal-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.7);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 100;
+        }
+        
+        .modal {
+            background-color: white;
+            border-radius: 10px;
+            padding: 30px;
+            width: 90%;
+            max-width: 500px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+        }
+        
+        h1 {
+            color: #2c3e50;
+            text-align: center;
+            margin-bottom: 30px;
+        }
+        
+        h2 {
+            color: #3498db;
+            margin-bottom: 20px;
+        }
+        
+        .input-group {
+            margin-bottom: 20px;
+        }
+        
+        label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: bold;
+        }
+        
+        input, select, textarea {
+            width: 100%;
+            padding: 12px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            font-size: 16px;
+            margin-top: 5px;
+        }
+        
+        button {
+            background-color: #3498db;
+            color: white;
+            border: none;
+            padding: 12px 20px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 16px;
+            font-weight: bold;
+            transition: background-color 0.3s;
+        }
+        
+        button:hover {
+            background-color: #2980b9;
+        }
+        
+        .btn-container {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 20px;
+        }
+        
+        .error {
+            color: #e74c3c;
+            margin-top: 5px;
+            font-size: 14px;
+        }
+        
+        .question-container {
+            background-color: white;
+            border-radius: 10px;
+            padding: 20px;
+            margin-bottom: 20px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+        
+        .options-container {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 10px;
+            margin-top: 15px;
+        }
+        
+        .option {
+            background-color: #f8f9fa;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            padding: 12px;
+            cursor: pointer;
+            transition: background-color 0.2s;
+        }
+        
+        .option:hover {
+            background-color: #e9ecef;
+        }
+        
+        .option.selected {
+            background-color: #3498db;
+            color: white;
+            border-color: #2980b9;
+        }
+        
+        .timer-container {
+            display: flex;
+            justify-content: center;
+            margin-bottom: 20px;
+        }
+        
+        .timer {
+            background-color: #e74c3c;
+            color: white;
+            padding: 8px 15px;
+            border-radius: 20px;
+            font-weight: bold;
+        }
+        
+        .progress-bar {
+            height: 10px;
+            background-color: #e0e0e0;
+            border-radius: 5px;
+            margin-bottom: 30px;
+            overflow: hidden;
+        }
+        
+        .progress {
+            height: 100%;
+            background-color: #3498db;
+            width: 0%;
+            transition: width 0.3s;
+        }
+        
+        .result-container {
+            text-align: center;
+            padding: 30px;
+            background-color: white;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+        
+        .score {
+            font-size: 24px;
+            font-weight: bold;
+            margin: 20px 0;
+        }
+        
+        .category-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+            gap: 15px;
+            margin-top: 20px;
+        }
+        
+        .category-card {
+            background-color: white;
+            border-radius: 8px;
+            padding: 15px;
+            text-align: center;
+            cursor: pointer;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            transition: transform 0.2s, box-shadow 0.2s;
+        }
+        
+        .category-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+        }
+        
+        .rules-list {
+            background-color: #f8f9fa;
+            border-left: 4px solid #3498db;
+            padding: 15px;
+            margin: 20px 0;
+            border-radius: 0 5px 5px 0;
+        }
+        
+        .hidden {
+            display: none;
+        }
+    </style>
+</head>
+<body>
+    <div class="container" id="app">
+        <h1>BRAINKASH</h1>
+        
+        <!-- Welcome section (initially hidden) -->
+        <div id="welcome-section" class="hidden">
+            <div class="question-container">
+                <h2>Welcome, <span id="user-name-display"></span>!</h2>
+                <p>Choose a category for your quiz:</p>
+                
+                <div class="category-grid">
+                    <div class="category-card" data-category="sport">Sports</div>
+                    <div class="category-card" data-category="mathematics">Mathematics</div>
+                    <div class="category-card" data-category="agric">Agriculture</div>
+                    <div class="category-card" data-category="economic">Economics</div>
+                    <div class="category-card" data-category="street">Street Happenings</div>
+                    <div class="category-card" data-category="entertainment">Entertainment</div>
+                    <div class="category-card" data-category="music">Music</div>
+                    <div class="category-card" data-category="fashion">Fashion</div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Rules section (initially hidden) -->
+        <div id="rules-section" class="hidden">
+            <div class="question-container">
+                <h2>Quiz Rules</h2>
+                <div class="rules-list">
+                    <p><strong>1.</strong> You have 15 seconds to answer each question.</p>
+                    <p><strong>2.</strong> You cannot go back to previous questions once you click next.</p>
+                    <p><strong>3.</strong> No form of cheating is allowed.</p>
+                </div>
+                <p>You will answer 20 questions, each worth 5 points, for a total of 100 possible points.</p>
+                <p>Your category: <strong><span id="selected-category-display"></span></strong></p>
+                <button id="start-quiz-btn">Start Quiz</button>
+            </div>
+        </div>
+        
+        <!-- Quiz section (initially hidden) -->
+        <div id="quiz-section" class="hidden">
+            <div class="timer-container">
+                <div class="timer" id="timer">15</div>
+            </div>
+            <div class="progress-bar">
+                <div class="progress" id="progress-bar"></div>
+            </div>
+            <div class="question-container">
+                <h2 id="question-text">Question text will appear here</h2>
+                <div class="options-container" id="options-container">
+                    <!-- Options will be inserted here -->
+                </div>
+            </div>
+            <div class="btn-container">
+                <button id="next-btn">Next Question</button>
+            </div>
+        </div>
+        
+        <!-- Result section (initially hidden) -->
+        <div id="result-section" class="hidden">
+            <div class="result-container">
+                <h2>Quiz Complete!</h2>
+                <p class="score">Your score: <span id="score-display">0</span>/100</p>
+                <div id="perfect-score-section" class="hidden">
+                    <p>Congratulations on your perfect score! Please fill out the form below to register your achievement.</p>
+                    <form id="user-info-form">
+                        <div class="input-group">
+                            <label for="full-name">Full Name</label>
+                            <input type="text" id="full-name" name="full-name" required>
+                        </div>
+                        <div class="input-group">
+                            <label for="email">Email</label>
+                            <input type="email" id="email" name="email" required>
+                        </div>
+                        <div class="input-group">
+                            <label for="phone">Phone Number</label>
+                            <input type="tel" id="phone" name="phone">
+                        </div>
+                        <div class="input-group">
+                            <label for="comment">Comments (Optional)</label>
+                            <textarea id="comment" name="comment" rows="3"></textarea>
+                        </div>
+                        <input type="hidden" id="score-input" name="score">
+                        <button type="submit">Submit</button>
+                    </form>
+                </div>
+                <div id="try-again-section" class="hidden">
+                    <p>Thank you for taking our quiz! We are still finalizing our platform.</p>
+                    <p>Please provide your email so we can notify you when we launch officially:</p>
+                    <div class="input-group">
+                        <input type="email" id="contact-email" placeholder="Your email address">
+                        <div class="error" id="email-error"></div>
+                    </div>
+                    <button id="contact-submit-btn">Submit</button>
+                    <button id="try-again-btn" style="margin-top: 15px;">Try Again</button>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Name input modal (shown first) -->
+        <div class="modal-overlay" id="name-modal">
+            <div class="modal">
+                <h2>Welcome to BRAINKASH</h2>
+                <p>Please enter your name to begin:</p>
+                <div class="input-group">
+                    <input type="text" id="name-input" placeholder="Enter your name">
+                    <div class="error" id="name-error"></div>
+                </div>
+                <button id="name-submit-btn">Continue</button>
+            </div>
+        </div>
+        
+        <!-- Thank you modal (hidden initially) -->
+        <div class="modal-overlay hidden" id="thank-you-modal">
+            <div class="modal">
+                <h2>Thank You!</h2>
+                <p>Your information has been submitted successfully.</p>
+                <button id="close-thank-you-btn">Close</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Main JavaScript file - Include this first -->
+    <script src="main.js"></script>
+    <script src="questions/agric.js"></script>
+    <script src="questions/fashion.js"></script>
+    <script src="questions/street.js"></script>
+    <script src="questions/sport.js"></script>
+    <script src="questions/mathematics.js"></script>
+    <script src="questions/economic.js"></script>
+    <script src="questions/entertainment.js"></script>
+    <script src="questions/music.js"></script>
+</body>
+</html>
