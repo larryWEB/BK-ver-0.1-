@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>BRAINKASH</title>
+    <title>Quiz Platform</title>
     <style>
         * {
             box-sizing: border-box;
@@ -272,34 +272,47 @@
             </div>
         </div>
         
-        <!-- Result section (initially hidden) -->
-        <div id="result-section" class="hidden">
-            <div class="result-container">
-                <h2>Quiz Complete!</h2>
-                <p class="score">Your score: <span id="score-display">0</span>/100</p>
-                <div id="perfect-score-section" class="hidden">
-                    <p>Congratulations on your perfect score! Please fill out the form below to register your achievement.</p>
-                    <form id="user-info-form">
-                        <div class="input-group">
-                            <label for="full-name">Full Name</label>
-                            <input type="text" id="full-name" name="full-name" required>
-                        </div>
-                        <div class="input-group">
-                            <label for="email">Email</label>
-                            <input type="email" id="email" name="email" required>
-                        </div>
-                        <div class="input-group">
-                            <label for="phone">Phone Number</label>
-                            <input type="tel" id="phone" name="phone">
-                        </div>
-                        <div class="input-group">
-                            <label for="comment">Comments (Optional)</label>
-                            <textarea id="comment" name="comment" rows="3"></textarea>
-                        </div>
-                        <input type="hidden" id="score-input" name="score">
-                        <button type="submit">Submit</button>
-                    </form>
+       <!-- Result section (initially hidden) -->
+<div id="result-section" class="hidden">
+    <div class="result-container">
+        <h2>Quiz Complete!</h2>
+        
+
+        <!-- Display user name, category (UPPERCASE), and timestamp -->
+        <p><strong id="user-name-result"></strong></p>
+        <p><strong id="category-result"></strong></p>
+        <p><strong>Date:</strong> <span id="date-result"></span></p>
+        <p><strong>Time:</strong> <span id="time-result"></span></p>
+        
+        <!-- Display final score -->
+        <p class="score">Your score: <span id="score-display">0</span>/100</p>
+
+        <div id="perfect-score-section" class="hidden">
+            <p>Congratulations on your perfect score! Please fill out the form below to register your achievement.</p>
+            <form id="user-info-form">
+                <div class="input-group">
+                    <label for="full-name">Full Name</label>
+                    <input type="text" id="full-name" name="full-name" required>
                 </div>
+                <div class="input-group">
+                    <label for="email">Email</label>
+                    <input type="email" id="email" name="email" required>
+                </div>
+                <div class="input-group">
+                    <label for="phone">Phone Number</label>
+                    <input type="tel" id="phone" name="phone">
+                </div>
+                <div class="input-group">
+                    <label for="comment">Comments (Optional)</label>
+                    <textarea id="comment" name="comment" rows="3"></textarea>
+                </div>
+                <input type="hidden" id="score-input" name="score">
+                <button type="submit">Submit</button>
+            </form>
+        </div>
+    </div>
+</div>
+        
                 <div id="try-again-section" class="hidden">
                     <p>Thank you for taking our quiz! We are still finalizing our platform.</p>
                     <p>Please provide your email so we can notify you when we launch officially:</p>
@@ -325,6 +338,8 @@
                 <button id="name-submit-btn">Continue</button>
             </div>
         </div>
+
+       
         
         <!-- Thank you modal (hidden initially) -->
         <div class="modal-overlay hidden" id="thank-you-modal">
