@@ -465,7 +465,33 @@ function endQuiz() {
     // Display score
     scoreDisplay.textContent = currentUser.score;
     scoreInput.value = currentUser.score;
-    
+
+    // Display user name and category
+    const userNameDisplay = document.getElementById('user-name-result');
+    const categoryDisplay = document.getElementById('category-result');
+    const dateDisplay = document.getElementById('date-result'); // For date
+    const timeDisplay = document.getElementById('time-result'); // For time
+
+    if (userNameDisplay) {
+        userNameDisplay.textContent = `Name: ${currentUser.name}`;
+    }
+    if (categoryDisplay) {
+        categoryDisplay.textContent = `Category: ${currentUser.category.toUpperCase()}`; // Convert category to uppercase
+    }
+
+    // Get current date and time
+    const now = new Date();
+    const formattedDate = now.toLocaleDateString(); // Format: MM/DD/YYYY
+    const formattedTime = now.toLocaleTimeString(); // Format: HH:MM AM/PM
+
+    // Display date and time separately
+    if (dateDisplay) {
+        dateDisplay.textContent = formattedDate;
+    }
+    if (timeDisplay) {
+        timeDisplay.textContent = formattedTime;
+    }
+
     // Show appropriate section based on score
     if (currentUser.score === 100) {
         perfectScoreSection.classList.remove('hidden');
@@ -475,6 +501,8 @@ function endQuiz() {
         tryAgainSection.classList.remove('hidden');
     }
 }
+
+
 
 // Reset quiz
 function resetQuiz() {
