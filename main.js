@@ -155,6 +155,16 @@ function init() {
         }
     });
     
+
+// Get reference to the back button
+const backToCategoriesBtn = document.getElementById('back-to-categories-btn');
+
+// Add event listener for back button
+backToCategoriesBtn.addEventListener('click', function() {
+    rulesSection.classList.add('hidden');
+    welcomeSection.classList.remove('hidden');
+});
+
     // Handle category selection
     categoryCards.forEach(card => {
         card.addEventListener('click', selectCategory);
