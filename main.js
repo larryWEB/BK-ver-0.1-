@@ -36,7 +36,7 @@ const progressBar = document.getElementById('progress-bar');
 const questionText = document.getElementById('question-text');
 const optionsContainer = document.getElementById('options-container');
 const nextBtn = document.getElementById('next-btn');
-
+const backToCategoriesBtn = document.getElementById('back-to-categories-btn');
 const resultSection = document.getElementById('result-section');
 const scoreDisplay = document.getElementById('score-display');
 const perfectScoreSection = document.getElementById('perfect-score-section');
@@ -155,16 +155,6 @@ function init() {
         }
     });
     
-
-// Get reference to the back button
-const backToCategoriesBtn = document.getElementById('back-to-categories-btn');
-
-// Add event listener for back button
-backToCategoriesBtn.addEventListener('click', function() {
-    rulesSection.classList.add('hidden');
-    welcomeSection.classList.remove('hidden');
-});
-
     // Handle category selection
     categoryCards.forEach(card => {
         card.addEventListener('click', selectCategory);
@@ -176,6 +166,9 @@ backToCategoriesBtn.addEventListener('click', function() {
     // Handle next question button
     nextBtn.addEventListener('click', goToNextQuestion);
     
+// Handle back to categories button
+backToCategoriesBtn.addEventListener('click', backToCategories);
+
     // Handle try again button
     tryAgainBtn.addEventListener('click', resetQuiz);
     
@@ -224,11 +217,31 @@ function showWelcomeScreen() {
     userNameDisplay.textContent = currentUser.name;
 }
 
+// Function to get time-based greeting
+function getTimeBasedGreeting() {
+    const hour = new Date().getHours();
+    
+    if (hour >= 5 && hour < 12) {
+        return "Good Morning";
+    } else if (hour >= 12 && hour < 17) {
+        return "Good Afternoon";
+    } else {
+        return "Good Evening";
+    }
+}
+
+// Set greeting on page load
+document.addEventListener("DOMContentLoaded", function() {
+    document.getElementById("greeting").textContent = getTimeBasedGreeting();
+});
+
+
 // Select category
 function selectCategory(e) {
     const category = e.target.getAttribute('data-category');
     currentUser.category = category;
     console.log(`Category selected: ${category}`);
+
     
     // Load questions for this category
     loadCategoryQuestions(category)
@@ -244,6 +257,13 @@ function selectCategory(e) {
             alert('Failed to load questions. Please try again.');
         });
 }
+
+    // Go back to categories screen
+    function backToCategories() {
+        console.log('Going back to categories selection');
+        rulesSection.classList.add('hidden');
+        welcomeSection.classList.remove('hidden');
+    }
 
 // Generate random question indices
 function generateRandomQuestions() {
@@ -514,7 +534,7 @@ function endQuiz() {
 
 
 
-// Reset quiz
+// Fix resetQuiz function to properly reset and navigate
 function resetQuiz() {
     console.log('Resetting quiz...');
     currentUser.currentQuestion = 0;
@@ -522,12 +542,18 @@ function resetQuiz() {
     currentUser.selectedAnswers = [];
     currentUser.randomQuestions = [];
     
+    // Hide all sections
     resultSection.classList.add('hidden');
+    quizSection.classList.add('hidden');
+    rulesSection.classList.add('hidden');
+    
+    // Show welcome section
     welcomeSection.classList.remove('hidden');
     
     // Save user data to cookies
     setCookie('quizUser', JSON.stringify(currentUser), 7);
 }
+
 
 // Submit contact email
 function submitContactEmail() {
