@@ -210,6 +210,20 @@
             border-radius: 0 5px 5px 0;
         }
         
+        .btn-container {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 20px;
+}
+
+#back-to-categories-btn {
+    background-color: #95a5a6;
+}
+
+#back-to-categories-btn:hover {
+    background-color: #7f8c8d;
+}
+
         .hidden {
             display: none;
         }
@@ -240,19 +254,26 @@
         
         <!-- Rules section (initially hidden) -->
         <div id="rules-section" class="hidden">
-            <div class="question-container">
-                <h2>Quiz Rules</h2>
-                <div class="rules-list">
-                    <p><strong>1.</strong> You have 15 seconds to answer each question.</p>
-                    <p><strong>2.</strong> You cannot go back to previous questions once you click next.</p>
-                    <p><strong>3.</strong> No form of cheating is allowed.</p>
-                </div>
-                <p>You will answer 20 questions, each worth 5 points, for a total of 100 possible points.</p>
-                <p>Your category: <strong><span id="selected-category-display"></span></strong></p>
+        <div class="question-container">
+            <h2>Quiz Rules</h2>
+            <div class="rules-list">
+                <p><strong>1.</strong> You have 15 seconds to answer each question.</p>
+                <p><strong>2.</strong> You cannot go back to previous questions once you click next.</p>
+                <p><strong>3.</strong> No form of cheating is allowed.</p>
+            </div>
+            <p>You will answer 20 questions, each worth 5 points, for a total of 100 possible points.</p>
+            <p>Your category: <strong><span id="selected-category-display"></span></strong></p>
+            <div class="btn-container">
+                <button id="back-to-categories-btn">Back</button>
                 <button id="start-quiz-btn">Start Quiz</button>
             </div>
         </div>
-        
+
+
+
+
+
+
         <!-- Quiz section (initially hidden) -->
         <div id="quiz-section" class="hidden">
             <div class="timer-container">
