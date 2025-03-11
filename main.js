@@ -17,7 +17,7 @@ let currentUser = {
 let timer;
 let timeLeft = 15;
 let isSingleCategoryMode = false; // Track if user chose single category mode
-let answerFeedbackTimer; // New timer for showing feedback before moving to next question
+let answerFeedbackTimer; // Timer for showing feedback before moving to next question
 
 // DOM Elements
 const nameModal = document.getElementById('name-modal');
@@ -48,7 +48,7 @@ const progressBar = document.getElementById('progress-bar');
 const questionText = document.getElementById('question-text');
 const optionsContainer = document.getElementById('options-container');
 const nextBtn = document.getElementById('next-btn');
-const answerFeedbackText = document.getElementById('answer-feedback-text'); // New element for feedback text
+const answerFeedbackText = document.getElementById('answer-feedback-text');
 
 const resultSection = document.getElementById('result-section');
 const scoreDisplay = document.getElementById('score-display');
@@ -63,6 +63,37 @@ const closeThankYouBtn = document.getElementById('close-thank-you-btn');
 const contactSubmitBtn = document.getElementById('contact-submit-btn');
 const contactEmail = document.getElementById('contact-email');
 const emailError = document.getElementById('email-error');
+
+// Create and add Quit button and confirmation modal
+function createQuitElements() {
+    // Create quit button for quiz section
+    const quitBtn = document.createElement('button');
+    quitBtn.id = 'quit-btn';
+    quitBtn.textContent = 'Quit';
+    quitBtn.className = 'quit-button';
+    
+    // Add quit button to the button container
+    const btnContainer = quizSection.querySelector('.btn-container');
+    btnContainer.insertBefore(quitBtn, nextBtn);
+    
+    // Create quit confirmation modal
+    const quitModal = document.createElement('div');
+    quitModal.className = 'modal-overlay hidden';
+    quitModal.id = 'quit-confirmation-modal';
+    
+    quitModal.innerHTML = `
+        <div class="modal">
+            <h2>Confirm Quit</h2>
+            <p id="quit-confirmation-text"></p>
+            <div class="btn-container">
+                <button id="quit-yes-btn">Yes</button>
+                <button id="quit-no-btn">No</button>
+            </div>
+        </div>
+    `;
+    
+    document.body.appendChild(quitModal);
+}
 
 // Function to load category questions dynamically
 function loadCategoryQuestions(category) {
@@ -135,6 +166,9 @@ function checkExistingUser() {
 // Initialize the application
 function init() {
     console.log('Initializing application...');
+    
+    // Create quit button and confirmation modal
+    createQuitElements();
     
     // Check for existing user
     const existingUser = checkExistingUser();
@@ -258,8 +292,66 @@ function init() {
         resetQuiz();
     });
 
+    // Handle quit button click
+    document.getElementById('quit-btn').addEventListener('click', confirmQuit);
+    
+    // Handle quit confirmation modal buttons
+    document.getElementById('quit-yes-btn').addEventListener('click', quitQuiz);
+    document.getElementById('quit-no-btn').addEventListener('click', cancelQuit);
+
     // Set greeting on page load
     document.getElementById("greeting").textContent = getTimeBasedGreeting();
+}
+
+// Function to confirm quitting the quiz
+function confirmQuit() {
+    // Clear the timer when showing confirmation
+    clearInterval(timer);
+    
+    // Get the confirmation modal
+    const quitModal = document.getElementById('quit-confirmation-modal');
+    const confirmationText = document.getElementById('quit-confirmation-text');
+    
+    // Personalize the confirmation message with the user's name
+    confirmationText.textContent = `${currentUser.name}, ARE YOU SURE YOU WANT TO QUIT THIS SESSION? YOU WILL LOSE ALL POINTS GAINED.`;
+    
+    // Show the confirmation modal
+    quitModal.classList.remove('hidden');
+}
+
+// Function to actually quit the quiz
+function quitQuiz() {
+    // Hide the confirmation modal
+    document.getElementById('quit-confirmation-modal').classList.add('hidden');
+    
+    // Clear any timers
+    clearInterval(timer);
+    
+    // Reset quiz-related data
+    currentUser.currentQuestion = 0;
+    currentUser.score = 0;
+    currentUser.selectedAnswers = [];
+    currentUser.randomQuestions = [];
+    
+    // Hide quiz section
+    quizSection.classList.add('hidden');
+    
+    // Show welcome screen
+    welcomeSection.classList.remove('hidden');
+    
+    // Save the updated user data
+    setCookie('quizUser', JSON.stringify(currentUser), 7);
+}
+
+// Function to cancel quitting and resume the quiz
+function cancelQuit() {
+    // Hide the confirmation modal
+    document.getElementById('quit-confirmation-modal').classList.add('hidden');
+    
+    // Resume the timer
+    if (timeLeft > 0) {
+        startTimer();
+    }
 }
 
 // Function to save current category selections
@@ -624,7 +716,7 @@ function updateTimerDisplay() {
     timerElement.textContent = timeLeft;
 }
 
-// NEW: Show answer feedback before moving to next question
+// Show answer feedback before moving to next question
 function showAnswerFeedback() {
     clearInterval(timer); // Stop the timer
     
@@ -818,7 +910,10 @@ function resetQuiz() {
     // Save user data to cookies
     setCookie('quizUser', JSON.stringify(currentUser), 7);
     
-    // After a short delay, restore the form and buttons for future attempts
+  
+        // After a short delay, restore the form and buttons for future attempts
+
+
     setTimeout(() => {
         if (contactSubmitBtn) contactSubmitBtn.style.display = 'block';
         if (tryAgainBtn) tryAgainBtn.style.display = 'block';
