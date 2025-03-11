@@ -240,6 +240,60 @@
             font-weight: bold;
             color: #3498db;
         }
+
+
+/* Answer feedback styles */
+.option.correct-answer {
+    background-color: #2ecc71; /* Green for correct answers */
+    color: white;
+    border-color: #27ae60;
+    transition: background-color 0.3s ease;
+}
+
+.option.wrong-answer {
+    background-color: #e74c3c; /* Red for wrong answers */
+    color: white;
+    border-color: #c0392b;
+    transition: background-color 0.3s ease;
+}
+
+/* Styles for the feedback text that was already in your HTML */
+.feedback-text {
+    margin-top: 15px;
+    font-weight: bold;
+    font-size: 18px;
+    text-align: center;
+    padding: 10px;
+    border-radius: 5px;
+    background-color: #f8f9fa;
+    transition: opacity 0.3s ease;
+}
+
+.feedback-text.correct {
+    color: #2ecc71;
+    background-color: rgba(46, 204, 113, 0.1);
+    border-left: 4px solid #2ecc71;
+}
+
+.feedback-text.incorrect {
+    color: #e74c3c;
+    background-color: rgba(231, 76, 60, 0.1);
+    border-left: 4px solid #e74c3c;
+}
+
+/* Add a subtle animation for feedback */
+@keyframes pulse {
+    0% { transform: scale(1); }
+    50% { transform: scale(1.05); }
+    100% { transform: scale(1); }
+}
+
+.option.correct-answer,
+.option.wrong-answer {
+    animation: pulse 0.5s ease;
+}
+
+
     </style>
 </head>
 <body>
@@ -347,6 +401,9 @@
                 <div class="options-container" id="options-container">
                     <!-- Options will be inserted here -->
                 </div>
+    
+                <div id="answer-feedback-text" class="feedback-text hidden"></div>
+
             </div>
             <div class="btn-container">
                 <button id="next-btn">Next Question</button>
@@ -428,7 +485,7 @@
     </div>
 
     <!-- JavaScript files -->
-    <script src="main.js"></script>
+    <script src="jes333333333.js"></script>
     <script src="questions/agric.js"></script>
     <script src="questions/fashion.js"></script>
     <script src="questions/street.js"></script>
