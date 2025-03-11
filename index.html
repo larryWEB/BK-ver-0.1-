@@ -4,297 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>BRAINKASH Quiz Platform</title>
-    <style>
-        * {
-            box-sizing: border-box;
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-        }
-        
-        body {
-            margin: 0;
-            padding: 0;
-            background-color: #f0f2f5;
-            color: #333;
-        }
-        
-        .container {
-            max-width: 800px;
-            margin: 0 auto;
-            padding: 20px;
-        }
-        
-        .modal-overlay {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background-color: rgba(0, 0, 0, 0.7);
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            z-index: 100;
-        }
-        
-        .modal {
-            background-color: white;
-            border-radius: 10px;
-            padding: 30px;
-            width: 90%;
-            max-width: 500px;
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
-        }
-        
-        h1 {
-            color: #2c3e50;
-            text-align: center;
-            margin-bottom: 30px;
-        }
-        
-        h2 {
-            color: #3498db;
-            margin-bottom: 20px;
-        }
-        
-        .input-group {
-            margin-bottom: 20px;
-        }
-        
-        label {
-            display: block;
-            margin-bottom: 8px;
-            font-weight: bold;
-        }
-        
-        input, select, textarea {
-            width: 100%;
-            padding: 12px;
-            border: 1px solid #ddd;
-            border-radius: 5px;
-            font-size: 16px;
-            margin-top: 5px;
-        }
-        
-        button {
-            background-color: #3498db;
-            color: white;
-            border: none;
-            padding: 12px 20px;
-            border-radius: 5px;
-            cursor: pointer;
-            font-size: 16px;
-            font-weight: bold;
-            transition: background-color 0.3s;
-        }
-        
-        button:hover {
-            background-color: #2980b9;
-        }
-        
-        .btn-container {
-            display: flex;
-            justify-content: space-between;
-            margin-top: 20px;
-        }
-        
-        #back-to-categories-btn {
-            background-color: #e74c3c;
-        }
-        
-        #back-to-categories-btn:hover {
-            background-color: #c0392b;
-        }
-        
-        .error {
-            color: #e74c3c;
-            margin-top: 5px;
-            font-size: 14px;
-        }
-        
-        .question-container {
-            background-color: white;
-            border-radius: 10px;
-            padding: 20px;
-            margin-bottom: 20px;
-            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-        }
-        
-        .options-container {
-            display: grid;
-            grid-template-columns: repeat(2, 1fr);
-            gap: 10px;
-            margin-top: 15px;
-        }
-        
-        .option {
-            background-color: #f8f9fa;
-            border: 1px solid #ddd;
-            border-radius: 5px;
-            padding: 12px;
-            cursor: pointer;
-            transition: background-color 0.2s;
-        }
-        
-        .option:hover {
-            background-color: #e9ecef;
-        }
-        
-        .option.selected {
-            background-color: #3498db;
-            color: white;
-            border-color: #2980b9;
-        }
-        
-        .timer-container {
-            display: flex;
-            justify-content: center;
-            margin-bottom: 20px;
-        }
-        
-        .timer {
-            background-color: #e74c3c;
-            color: white;
-            padding: 8px 15px;
-            border-radius: 20px;
-            font-weight: bold;
-        }
-        
-        .progress-bar {
-            height: 10px;
-            background-color: #e0e0e0;
-            border-radius: 5px;
-            margin-bottom: 30px;
-            overflow: hidden;
-        }
-        
-        .progress {
-            height: 100%;
-            background-color: #3498db;
-            width: 0%;
-            transition: width 0.3s;
-        }
-        
-        .result-container {
-            text-align: center;
-            padding: 30px;
-            background-color: white;
-            border-radius: 10px;
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-        }
-        
-        .score {
-            font-size: 24px;
-            font-weight: bold;
-            margin: 20px 0;
-        }
-        
-        .category-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
-            gap: 15px;
-            margin-top: 20px;
-        }
-        
-        .category-card {
-            background-color: white;
-            border-radius: 8px;
-            padding: 15px;
-            text-align: center;
-            cursor: pointer;
-            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-            transition: transform 0.2s, box-shadow 0.2s;
-        }
-        
-        .category-card:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
-        }
-        
-        .rules-list {
-            background-color: #f8f9fa;
-            border-left: 4px solid #3498db;
-            padding: 15px;
-            margin: 20px 0;
-            border-radius: 0 5px 5px 0;
-        }
-        
-        .hidden {
-            display: none;
-        }
-        
-        .category-selection-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
-            gap: 15px;
-            margin: 20px 0;
-        }
-        
-        .category-count {
-            width: 100%;
-            padding: 8px;
-            border: 1px solid #ddd;
-            border-radius: 5px;
-        }
-        
-        #total-questions-count {
-            font-weight: bold;
-            color: #3498db;
-        }
-
-
-/* Answer feedback styles */
-.option.correct-answer {
-    background-color: #2ecc71; /* Green for correct answers */
-    color: white;
-    border-color: #27ae60;
-    transition: background-color 0.3s ease;
-}
-
-.option.wrong-answer {
-    background-color: #e74c3c; /* Red for wrong answers */
-    color: white;
-    border-color: #c0392b;
-    transition: background-color 0.3s ease;
-}
-
-/* Styles for the feedback text that was already in your HTML */
-.feedback-text {
-    margin-top: 15px;
-    font-weight: bold;
-    font-size: 18px;
-    text-align: center;
-    padding: 10px;
-    border-radius: 5px;
-    background-color: #f8f9fa;
-    transition: opacity 0.3s ease;
-}
-
-.feedback-text.correct {
-    color: #2ecc71;
-    background-color: rgba(46, 204, 113, 0.1);
-    border-left: 4px solid #2ecc71;
-}
-
-.feedback-text.incorrect {
-    color: #e74c3c;
-    background-color: rgba(231, 76, 60, 0.1);
-    border-left: 4px solid #e74c3c;
-}
-
-/* Add a subtle animation for feedback */
-@keyframes pulse {
-    0% { transform: scale(1); }
-    50% { transform: scale(1.05); }
-    100% { transform: scale(1); }
-}
-
-.option.correct-answer,
-.option.wrong-answer {
-    animation: pulse 0.5s ease;
-}
-
-
-    </style>
+   <link rel="stylesheet" href="style.css">
 </head>
 <body>
     <div class="container" id="app">
@@ -410,19 +120,20 @@
             </div>
         </div>
         
-        <!-- Result section (initially hidden) -->
+        <!---- Result section (initially hidden) -->
         <div id="result-section" class="hidden">
             <div class="result-container">
-                <h2>Quiz Complete!</h2>
+                <h2 >Quiz Complete!</h2>
                 
-                <!-- Display user name, category (UPPERCASE), and timestamp -->
+                <!-- Display user name, category (UPPERCASE), and timestamp
                 <p><strong id="user-name-result"></strong></p>
                 <p><strong id="category-result"></strong></p>
                 <p><strong>Date:</strong> <span id="date-result"></span></p>
-                <p><strong>Time:</strong> <span id="time-result"></span></p>
+                <p><strong>Time:</strong> <span id="time-result"></span></p>-->
                 
                 <!-- Display final score -->
-                <p class="score">Your score: <span id="score-display">0</span>/100</p>
+                <p class="score"> Your score: <span id="score-display">0</span>/100</p>
+                   
                 
                 <div id="perfect-score-section" class="hidden">
                     <p>Congratulations on your perfect score! Please fill out the form below to register your achievement.</p>
@@ -485,7 +196,8 @@
     </div>
 
     <!-- JavaScript files -->
-    <script src="main.js"></script>
+    <script src="quit.js"></script>
+    <script src="result-report.js"></script>
     <script src="questions/agric.js"></script>
     <script src="questions/fashion.js"></script>
     <script src="questions/street.js"></script>
@@ -494,5 +206,10 @@
     <script src="questions/economic.js"></script>
     <script src="questions/entertainment.js"></script>
     <script src="questions/music.js"></script>
+
+    <!-- Required libraries for PDF and DOC generation -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
+
+
 </body>
 </html>
