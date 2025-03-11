@@ -17,6 +17,7 @@ let currentUser = {
 let timer;
 let timeLeft = 15;
 let isSingleCategoryMode = false; // Track if user chose single category mode
+let answerFeedbackTimer; // New timer for showing feedback before moving to next question
 
 // DOM Elements
 const nameModal = document.getElementById('name-modal');
@@ -47,6 +48,7 @@ const progressBar = document.getElementById('progress-bar');
 const questionText = document.getElementById('question-text');
 const optionsContainer = document.getElementById('options-container');
 const nextBtn = document.getElementById('next-btn');
+const answerFeedbackText = document.getElementById('answer-feedback-text'); // New element for feedback text
 
 const resultSection = document.getElementById('result-section');
 const scoreDisplay = document.getElementById('score-display');
@@ -239,7 +241,7 @@ function init() {
     startQuizBtn.addEventListener('click', startQuiz);
     
     // Handle next question button
-    nextBtn.addEventListener('click', goToNextQuestion);
+    nextBtn.addEventListener('click', showAnswerFeedback); // Changed to show feedback first
     
     // Handle try again button
     tryAgainBtn.addEventListener('click', resetQuiz);
@@ -568,6 +570,15 @@ function loadQuestion() {
     
     // Disable next button until option is selected
     nextBtn.disabled = true;
+    
+    // Reset the next button text (in case it was changed)
+    nextBtn.textContent = "Next Question";
+    
+    // If there's a feedback element, clear it
+    if (answerFeedbackText) {
+        answerFeedbackText.textContent = "";
+        answerFeedbackText.classList.add('hidden');
+    }
 }
 
 // Select option
@@ -602,8 +613,8 @@ function startTimer() {
             // Auto-select answer or move to next question
             if (currentUser.selectedAnswers[currentUser.currentQuestion] === undefined) {
                 currentUser.selectedAnswers[currentUser.currentQuestion] = -1; // No answer
+                showAnswerFeedback(); // Show feedback when timer runs out
             }
-            goToNextQuestion();
         }
     }, 1000);
 }
@@ -613,11 +624,10 @@ function updateTimerDisplay() {
     timerElement.textContent = timeLeft;
 }
 
-// Go to next question
-function goToNextQuestion() {
-    clearInterval(timer);
+// NEW: Show answer feedback before moving to next question
+function showAnswerFeedback() {
+    clearInterval(timer); // Stop the timer
     
-    // Check if answer is correct and update score
     const questionIndex = currentUser.currentQuestion;
     
     // Safety check
@@ -649,14 +659,76 @@ function goToNextQuestion() {
     }
     
     const selectedAnswer = currentUser.selectedAnswers[questionIndex];
+    const correctAnswer = question.correctAnswer;
     
-    console.log(`Checking answer for question ${questionIndex + 1}: selected=${selectedAnswer}, correct=${question.correctAnswer}`);
+    console.log(`Checking answer for question ${questionIndex + 1}: selected=${selectedAnswer}, correct=${correctAnswer}`);
     
-    if (selectedAnswer === question.correctAnswer) {
-        currentUser.score += 5; // Each question is worth 5 marks
+    // Get all option elements
+    const options = document.querySelectorAll('.option');
+    
+    // Reset all option styles
+    options.forEach(option => {
+        option.classList.remove('correct-answer', 'wrong-answer');
+    });
+    
+    // Highlight the correct answer
+    const correctOption = options[correctAnswer];
+    if (correctOption) {
+        correctOption.classList.add('correct-answer');
     }
     
-    // Move to next question or end quiz
+    // If user selected an answer and it's wrong, highlight it as wrong
+    if (selectedAnswer !== -1 && selectedAnswer !== correctAnswer) {
+        const selectedOption = options[selectedAnswer];
+        if (selectedOption) {
+            selectedOption.classList.add('wrong-answer');
+        }
+    }
+    
+    // Update score if answer is correct
+    if (selectedAnswer === correctAnswer) {
+        currentUser.score += 5; // Each question is worth 5 marks
+        
+        // Display feedback text if element exists
+        if (answerFeedbackText) {
+            answerFeedbackText.textContent = "Correct! +5 points";
+            answerFeedbackText.classList.remove('hidden');
+            answerFeedbackText.style.color = '#2ecc71'; // Green color
+        }
+    } else {
+        // Display feedback text if element exists
+        if (answerFeedbackText) {
+            answerFeedbackText.textContent = `Incorrect. The correct answer is: ${question.options[correctAnswer]}`;
+            answerFeedbackText.classList.remove('hidden');
+            answerFeedbackText.style.color = '#e74c3c'; // Red color
+        }
+    }
+    
+    // Disable clicking on options during feedback
+    options.forEach(option => {
+        option.removeEventListener('click', selectOption);
+        option.style.cursor = 'default';
+    });
+    
+    // Change next button text to indicate moving to next question
+    nextBtn.textContent = "Continue";
+    nextBtn.disabled = false;
+    
+    // Remove the click event listener and add a new one
+    nextBtn.removeEventListener('click', showAnswerFeedback);
+    nextBtn.addEventListener('click', goToNextQuestion);
+    
+    // Save user data to cookies
+    setCookie('quizUser', JSON.stringify(currentUser), 7);
+}
+
+// Go to next question
+function goToNextQuestion() {
+    // Reset the next button event listener
+    nextBtn.removeEventListener('click', goToNextQuestion);
+    nextBtn.addEventListener('click', showAnswerFeedback);
+    
+    // Move to next question
     currentUser.currentQuestion++;
     if (currentUser.currentQuestion >= 20 || currentUser.currentQuestion >= currentUser.randomQuestions.length) {
         endQuiz();
@@ -664,9 +736,6 @@ function goToNextQuestion() {
         loadQuestion();
         startTimer();
     }
-    
-    // Save user data to cookies
-    setCookie('quizUser', JSON.stringify(currentUser), 7);
 }
 
 // End quiz
