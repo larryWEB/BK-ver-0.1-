@@ -612,7 +612,7 @@ function startQuiz() {
     
     // Set up first question
     loadQuestion();
-    startTimer();
+    //startTimer();
     
     // Save user data to cookies
     setCookie('quizUser', JSON.stringify(currentUser), 7);
@@ -690,8 +690,8 @@ function selectOption(e) {
     currentUser.selectedAnswers[currentUser.currentQuestion] = parseInt(e.target.dataset.index);
 }
 
-// 1. Modify the startTimer function to automatically move to the next question
-function startTimer() {
+// startTimer function to automatically move to the next question
+/*function startTimer() {
     timeLeft = 15;
     updateTimerDisplay();
     
@@ -711,7 +711,7 @@ function startTimer() {
             showAnswerFeedback();
         }
     }, 1000);
-}
+}*/
 
 // Update timer display
 function updateTimerDisplay() {
