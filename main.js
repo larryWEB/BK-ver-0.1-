@@ -690,7 +690,7 @@ function selectOption(e) {
     currentUser.selectedAnswers[currentUser.currentQuestion] = parseInt(e.target.dataset.index);
 }
 
-// Start timer
+// 1. Modify the startTimer function to automatically move to the next question
 function startTimer() {
     timeLeft = 15;
     updateTimerDisplay();
@@ -702,11 +702,13 @@ function startTimer() {
         
         if (timeLeft <= 0) {
             clearInterval(timer);
-            // Auto-select answer or move to next question
+            // Auto-select "no answer" if user hasn't selected anything
             if (currentUser.selectedAnswers[currentUser.currentQuestion] === undefined) {
-                currentUser.selectedAnswers[currentUser.currentQuestion] = -1; // No answer
-                showAnswerFeedback(); // Show feedback when timer runs out
+                currentUser.selectedAnswers[currentUser.currentQuestion] = -1; // No answer selected
             }
+            
+            // Show feedback and automatically move to next question
+            showAnswerFeedback();
         }
     }, 1000);
 }
@@ -716,7 +718,9 @@ function updateTimerDisplay() {
     timerElement.textContent = timeLeft;
 }
 
-// Show answer feedback before moving to next question
+
+
+// 2. Make sure the showAnswerFeedback function always advances after the feedback delay
 function showAnswerFeedback() {
     clearInterval(timer); // Stop the timer
     
@@ -802,17 +806,19 @@ function showAnswerFeedback() {
         option.style.cursor = 'default';
     });
     
-    // Change next button text to indicate moving to next question
-    nextBtn.textContent = "Continue";
-    nextBtn.disabled = false;
-    
-    // Remove the click event listener and add a new one
-    nextBtn.removeEventListener('click', showAnswerFeedback);
-    nextBtn.addEventListener('click', goToNextQuestion);
+    // Change next button text to indicate the system will automatically continue
+    nextBtn.textContent = "Continuing...";
+    nextBtn.disabled = true;
     
     // Save user data to cookies
     setCookie('quizUser', JSON.stringify(currentUser), 7);
+    
+    // IMPORTANT: Always set a timer to move to the next question
+    clearTimeout(answerFeedbackTimer); // Clear any existing timer
+    answerFeedbackTimer = setTimeout(goToNextQuestion, 2000); // 2 seconds delay
 }
+
+
 
 // Go to next question
 function goToNextQuestion() {
