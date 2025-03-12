@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>BRAINKASH Quiz Platform</title>
-   <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="style.css">
 </head>
 <body>
     <div class="container" id="app">
@@ -15,7 +15,6 @@
             <div class="question-container">
                 <h2><span id="greeting"></span>, <span id="user-name-display"></span>!</h2>
                 <p>Choose a category for your quiz:</p>
-                
                 <div class="category-grid">
                     <div class="category-card" data-category="sport">Sports</div>
                     <div class="category-card" data-category="mathematics">Mathematics</div>
@@ -34,7 +33,6 @@
             <div class="question-container">
                 <h2>Select Questions from Categories</h2>
                 <p>Choose how many questions you want from each category (total must be 20):</p>
-                
                 <div class="category-selection-grid">
                     <div class="input-group">
                         <label for="sport-count">Sports</label>
@@ -69,10 +67,8 @@
                         <input type="number" id="fashion-count" data-category="fashion" min="0" max="20" value="0" class="category-count">
                     </div>
                 </div>
-                
                 <p>Total Questions: <span id="total-questions-count">0</span>/20</p>
                 <div id="category-error" class="error"></div>
-                
                 <div class="btn-container">
                     <button id="back-to-welcome-btn">Back</button>
                     <button id="confirm-categories-btn">Continue</button>
@@ -85,7 +81,7 @@
             <div class="question-container">
                 <h2>Quiz Rules</h2>
                 <div class="rules-list">
-                    <p><strong>1.</strong> You have 15 seconds to answer each question.</p>
+                    <p><strong>1.</strong> You have 300 seconds to answer all questions.</p>
                     <p><strong>2.</strong> You cannot go back to previous questions once you click next.</p>
                     <p><strong>3.</strong> No form of cheating is allowed.</p>
                 </div>
@@ -101,7 +97,14 @@
         <!-- Quiz section (initially hidden) -->
         <div id="quiz-section" class="hidden">
             <div class="timer-container">
-                <div class="timer" id="timer">15</div>
+                <div class="circular-timer">
+                    <div class="timer-circle">
+                        <div class="timer-circle-inner">
+                            <span id="global-timer-display">300</span>
+                        </div>
+                    </div>
+                    <div class="timer-label">Time Remaining</div>
+                </div>
             </div>
             <div class="progress-bar">
                 <div class="progress" id="progress-bar"></div>
@@ -111,30 +114,18 @@
                 <div class="options-container" id="options-container">
                     <!-- Options will be inserted here -->
                 </div>
-    
                 <div id="answer-feedback-text" class="feedback-text hidden"></div>
-
             </div>
             <div class="btn-container">
                 <button id="next-btn">Next Question</button>
             </div>
         </div>
         
-        <!---- Result section (initially hidden) -->
+        <!-- Result section (initially hidden) -->
         <div id="result-section" class="hidden">
             <div class="result-container">
-                <h2 >Quiz Complete!</h2>
-                
-                <!-- Display user name, category (UPPERCASE), and timestamp
-                <p><strong id="user-name-result"></strong></p>
-                <p><strong id="category-result"></strong></p>
-                <p><strong>Date:</strong> <span id="date-result"></span></p>
-                <p><strong>Time:</strong> <span id="time-result"></span></p>-->
-                
-                <!-- Display final score -->
-                <p class="score"> Your score: <span id="score-display">0</span>/100</p>
-                   
-                
+                <h2>Quiz Complete!</h2>
+                <p class="score">Your score: <span id="score-display">0</span>/100</p>
                 <div id="perfect-score-section" class="hidden">
                     <p>Congratulations on your perfect score! Please fill out the form below to register your achievement.</p>
                     <form id="user-info-form">
@@ -158,7 +149,6 @@
                         <button type="submit">Submit</button>
                     </form>
                 </div>
-                
                 <div id="try-again-section" class="hidden">
                     <p>Thank you for taking our quiz! We are still finalizing our platform.</p>
                     <p>Please provide your email so we can notify you when we launch officially:</p>
@@ -196,6 +186,9 @@
     </div>
 
     <!-- JavaScript files -->
+    <script src="main.js"></script>
+    <script src="quiz-timer.js"></script>
+    <script src="result-report.js"></script>
     <script src="questions/agric.js"></script>
     <script src="questions/fashion.js"></script>
     <script src="questions/street.js"></script>
@@ -204,15 +197,13 @@
     <script src="questions/economic.js"></script>
     <script src="questions/entertainment.js"></script>
     <script src="questions/music.js"></script>
-    <script src="quiz-timer.js"></script>
-    <script src="result-report.js"></script>
-    <script src="main.js"></script>
+  
+ 
   
  
 
     <!-- Required libraries for PDF and DOC generation -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
-
 
 </body>
 </html>
