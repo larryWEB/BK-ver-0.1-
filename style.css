@@ -389,3 +389,113 @@ animation: pulse 0.5s ease;
 #download-pdf-btn:hover {
     background-color: #c0392b;
 }
+
+
+/* Dual Timer Display CSS for BRAINKASH Quiz */
+
+/* Timer container styling */
+.timers-wrapper {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background-color: #2c3e50;
+    padding: 12px 15px;
+    border-radius: 8px;
+    margin-bottom: 15px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+}
+
+/* Individual timer container styling */
+.question-timer-container, .global-timer-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    min-width: 120px;
+}
+
+/* Timer labels */
+.timer-label {
+    font-size: 14px;
+    font-weight: 500;
+    color: #ecf0f1;
+    margin-bottom: 5px;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+/* Question timer styling */
+.timer {
+    font-size: 28px;
+    font-weight: bold;
+    color: #e74c3c;
+    background-color: rgba(0, 0, 0, 0.2);
+    border-radius: 6px;
+    padding: 5px 15px;
+    min-width: 60px;
+    text-align: center;
+}
+
+/* Global timer styling */
+.global-timer {
+    font-size: 28px;
+    font-weight: bold;
+    color: #3498db;
+    background-color: rgba(0, 0, 0, 0.2);
+    border-radius: 6px;
+    padding: 5px 15px;
+    min-width: 90px;
+    text-align: center;
+}
+
+/* Warning state for timers */
+.timer-warning {
+    color: #f39c12;
+    animation: pulse 1s infinite;
+}
+
+/* Critical state for timers */
+.timer-danger {
+    color: #e74c3c;
+    animation: pulse 0.7s infinite;
+}
+
+/* Progress bar adjustments to work with timers */
+.progress-bar {
+    margin-top: 5px;
+    height: 8px;
+    background-color: #34495e;
+    border-radius: 4px;
+    overflow: hidden;
+}
+
+.progress {
+    height: 100%;
+    background-color: #2ecc71;
+    transition: width 0.3s ease;
+}
+
+/* Make sure timer fits in mobile view */
+@media (max-width: 480px) {
+    .timers-wrapper {
+        flex-direction: column;
+        gap: 10px;
+    }
+    
+    .question-timer-container, .global-timer-container {
+        flex-direction: row;
+        width: 100%;
+        justify-content: space-between;
+    }
+    
+    .timer-label {
+        margin-bottom: 0;
+        margin-right: 10px;
+    }
+}
+
+/* Pulse animation for warning states */
+@keyframes pulse {
+    0% { opacity: 1; }
+    50% { opacity: 0.7; }
+    100% { opacity: 1; }
+}
