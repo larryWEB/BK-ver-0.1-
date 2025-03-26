@@ -130,7 +130,7 @@ function generateResultReportHTML() {
             
             <div class="inspiring-message">
                 <p><em>"${inspiringMessage}"</em></p>
-                <p class="signature">AKINSEYE OLUWATOSIN OLALEYE<br>CEO, BRAINKASH EMPIRE</p>
+            <p class="signature">BRODA OLA<br>CEO, BRAINKASH INC</p>
             </div>
         </div>
     `;
